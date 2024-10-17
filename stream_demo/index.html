@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+    <title>CMSIS-Stream test</title>
+  </head>
+  <body>
+    <h1>CMSIS-Stream / CMSIS-DSP and WebAssembly</h1>
+    <p>It is an example of <a href="https://github.com/ARM-software/CMSIS-DSP">CMSIS-DSP</a> and <a href="https://github.com/ARM-software/CMSIS-Stream">CMSIS-Stream</a> compiled to WebAssembly and running in the browser.</p>
+    <p>It does not work on Firefox. Tested with Chrome, Safari and Microsoft Edge.</p>
+    <p>Click on the "start" button to start playing some sounds (warning : it may be loud).</p>
+    <button id="button-start" disabled="true">start</button>
+    
+   <!-- <input disabled="true" type="checkbox" id="lead" name="lead" checked>lead</input> -->
+    <p id="error" style="color: red;"></p>
+    <main>
+      
+
+      <div id="inner">
+        <table>
+          <tr>
+            <th></th>
+            <th>Left</th>
+            <th>Right</th>
+          </tr>
+          <tr>
+            <td>Amplitude</td>
+            <td><canvas id="visualizerL" style="width: 300px; height: 50px; background-color: gray;"></canvas></td>
+            <td><canvas id="visualizerR" style="width: 300px; height: 50px; background-color: gray;"></canvas></td>
+            
+          </tr>
+          <tr>
+            <td>Spectrum</td>
+            <td> <canvas id="freqVisualizerL" style="width: 300px; height: 50px; background-color: gray;"></canvas></td>
+            <td><canvas id="freqVisualizerR" style="width: 300px; height: 50px; background-color: gray;"></canvas></td>
+          </tr>
+        </table>
+      
+     
+      <br />
+      </div>
+      <br />
+      <script src="./main.js" type="module"></script>
+
+    </main>
+    <!--<p>Kraftwerk - Das Model<br/>
+Year: 1978<br/>
+Album: Die Mensch-Maschine (The Man-Machine)</p>-->
+<p>Synthesizer graph being executed. It will play 6 songs.</p>
+    <div><a href="graph.svg"><img src = "graph.svg" alt="Graph" style="width: 100%; "/></a>
+
+     </div>
+  </body>
+</html>
