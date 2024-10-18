@@ -53,7 +53,8 @@ nbSched = int(1.0 * args.duration * s.sampling_freq / s.nb)
 #>> seq 33 _33 36_33_ 36_33_ 28 _28 31_28_ 31
 #>> sawsynth 0.01 0.2 
 
-import examples.example3 as ex 
+#import examples.example3 as ex 
+import examples.example4 as ex 
 others=ex.create(args)
 
 

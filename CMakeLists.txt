@@ -45,6 +45,8 @@ target_include_directories(stream_kernel PUBLIC .)
 target_include_directories(stream_kernel PUBLIC ${CMSISSTREAM}/Include/cg/nodes/cpp)
 target_link_libraries(stream_kernel PUBLIC CMSISDSP)
 
+target_include_directories(stream_kernel PUBLIC SAM/src)
+
 if (MAC)
 add_custom_command(TARGET stream_kernel PRE_BUILD 
         BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/test.pdf
@@ -72,7 +74,14 @@ target_sources(stream_kernel PUBLIC scheduler.cpp
         source/Songs/ToccataAndFugueInDMinor.cpp
         source/Songs/WeAreTheChampion.cpp
 	source/instruments.cpp
-	source/synth_Playtune_waves.cpp)
+	source/synth_Playtune_waves.cpp
+	SAM/src/debug.c             
+	SAM/src/render.c
+        SAM/src/sam.c
+        SAM/src/processframes.c
+        SAM/src/createtransitions.c 
+        SAM/src/reciter.c
+	)
 
 
 install(FILES ${CMAKE_BINARY_DIR}/stream_kernel.js

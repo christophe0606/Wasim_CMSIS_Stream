@@ -15,8 +15,7 @@ The support classes and code are covered by CMSIS-Stream license.
 
 
 
-extern uint32_t scheduler(int *error,struct FreeQueue* output_queue,
-                              int32_t *atomic);
+extern uint32_t scheduler(int *error,dsp_context *context);
 
 
 #endif

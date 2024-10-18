@@ -23,6 +23,7 @@
 #include "Noise.hpp"
 #include "Operator.hpp"
 #include "Oscillator.hpp"
+#include "Sam.hpp"
 #include "MIDI/MIDISeq.hpp"
 #include "MIDI/MIDIWav.hpp"
 #include "MIDI/MIDIEnv.hpp"
