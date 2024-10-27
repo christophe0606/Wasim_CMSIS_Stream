@@ -35,4 +35,8 @@ typedef struct {
 #endif
 
 #define CG_BEFORE_BUFFER __attribute__((aligned(8)))
+
+#define CG_AFTER_INCLUDES \
+  char txt[256]={0};
+  
 #endif 

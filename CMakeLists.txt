@@ -19,6 +19,7 @@ target_compile_definitions(stream_kernel PUBLIC OSX)
 target_link_libraries(stream_kernel PUBLIC -Wl,-framework,CoreAudio,-framework,AudioUnit)
 else()
 set (CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 23)
 add_executable(stream_kernel)
 target_compile_options(CMSISDSP PUBLIC -O2)
 target_sources(stream_kernel PUBLIC StreamKernel.cc )
@@ -26,7 +27,6 @@ target_compile_options(stream_kernel PUBLIC
 	    -sSHARED_MEMORY
 		-sWASM_WORKERS=1
 		-sUSE_PTHREADS
-		-std=c++2b
 		)
 target_link_options(stream_kernel PUBLIC -sEXPORTED_FUNCTIONS=['_malloc','_free']
 	    -sEXPORTED_RUNTIME_METHODS=['ccall','cwrap']

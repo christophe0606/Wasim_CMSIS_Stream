@@ -10,6 +10,7 @@ from nodes.oscillator import *
 from nodes.params import *
 from nodes.sink import *
 from nodes.settings import *
+from nodes.sam import *
 
 NBCHANNELS=16
 
@@ -35,6 +36,8 @@ def create(args):
 
     even=c[0::2]
     odd=c[1::2]
+    sam = Sam()
+    odd.append(sam)
     ra = mixing(even)
     rb = mixing(odd)
     s.g.connect(ra.o,si.l)

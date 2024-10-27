@@ -21,6 +21,7 @@ class MIDISeq(Source):
         for i in range(nb_channels):
             self.addOutput(chr(ord('A')+i),midCmdType,1)
 
+        self.addVariableArg("(char*)txt")
         self.addVariableArg(music)
 
     @property

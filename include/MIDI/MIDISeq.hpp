@@ -56,6 +56,12 @@ float tune;
 
 #define NBSONG 6
 static const uint8_t* allSongs[NBSONG]={empire,champion,overture,toccata,pink,bohemian};
+static const char* names[NBSONG]={"The Empire strikes back",
+"We are the champion",
+"Overture",
+"Toccata and fugue in D minor",
+"Pink Panther",
+"Bohemian Rhapsody"};
 
 template<typename OUT,int outputSize>
 class MIDISeq;
@@ -64,8 +70,8 @@ template<>
 class MIDISeq<midi_cmd_t,1>:public NodeBase
 {
 public:
-    MIDISeq(std::initializer_list<FIFOBase<midi_cmd_t>*> dst,const uint8_t music[] ):
-    mDstList(dst),mMusic((const uint8_t*)music){
+    MIDISeq(std::initializer_list<FIFOBase<midi_cmd_t>*> dst,char *txt,const uint8_t music[] ):
+    mDstList(dst),mytxt(txt),mMusic((const uint8_t*)music){
     	done=false;
         inst = 0;
         mPos=0;
@@ -74,6 +80,7 @@ public:
         nb_channels=mDstList.size();
         nbSong=0;
         mMusic = allSongs[nbSong];
+        strcpy(mytxt,names[0]);
     };
 
     int prepareForRunning() final
@@ -134,6 +141,8 @@ public:
                 }
                 mPos=0;
                 mMusic = allSongs[nbSong];
+                strcpy(mytxt,names[nbSong]);
+
 
                 delay = gTime + 0.5;
                 delayState = true;
@@ -247,5 +256,5 @@ protected:
 private:
     int nb_channels;
     std::vector<FIFOBase<midi_cmd_t>*> mDstList;
-
+    char*mytxt;
 };

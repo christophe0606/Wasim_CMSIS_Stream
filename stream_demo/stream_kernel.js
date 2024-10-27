@@ -1127,8 +1127,8 @@ function dbg(...args) {
 // === Body ===
 
 var ASM_CONSTS = {
-  231912: ($0, $1, $2, $3, $4) => { postMessage({type:'workerstarted', atomic:$0, queuePointers:{ memory:wasmMemory, bufferLengthPointer:$1, channelCountPointer:$2, statePointer:$3, channelDataPointer:$4 } }); },  
- 232086: ($0, $1) => { postMessage({type:'schedended', error:$0, nb:$1 }); }
+  242056: ($0, $1, $2, $3, $4) => { postMessage({type:'workerstarted', atomic:$0, queuePointers:{ memory:wasmMemory, bufferLengthPointer:$1, channelCountPointer:$2, statePointer:$3, channelDataPointer:$4 } }); },  
+ 242230: ($0, $1) => { postMessage({type:'schedended', error:$0, nb:$1 }); }
 };
 
 // end include: preamble.js

@@ -181,6 +181,7 @@ int main(int argc, char const *argv[])
     context.outputFifo[0] = &outputFifoLeft;
     context.outputFifo[1] = &outputFifoRight;
 
+
 	if (signal(SIGINT, catch_function) == SIG_ERR) {
         fputs("An error occurred while setting a signal handler.\n", stderr);
         return(EXIT_FAILURE);

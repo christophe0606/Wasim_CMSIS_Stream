@@ -21,9 +21,11 @@ class Node(GenericNode):
         return(b)
 
 class Source(GenericSource):
-    def __init__(self,nb=None,the_type = CType(F32)):
+    def __init__(self,nb=None,name=None,the_type = CType(F32)):
         s = Settings()
-        GenericSource.__init__(self,f"Node_{s.new_node_id()}")
+        if name is None:
+            name = f"Node_{s.new_node_id()}"
+        GenericSource.__init__(self,name)
         if nb:
            self.addOutput("o",the_type,nb)
         else:

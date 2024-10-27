@@ -6,8 +6,16 @@
 extern "C" {
 #include "reciter.h"
 #include "sam.h"
+#include "dsp/filtering_functions.h"
 
 int debug = 0;
+
+#define NBCOEFS 6
+static arm_fir_instance_f32 S;
+const float coefs[8]={ 0.01974548, 0.13238929, 0.34784997, 0.34784997, 0.13238929,
+       0.01974548, 0.        , 0.};
+ 
+
 
 }
 
@@ -23,26 +31,45 @@ class Sam<float,outputSize>:
 GenericSource<float,outputSize>
 {
 public:
-    Sam(FIFOBase<float> &dst):
-    GenericSource<float,outputSize>(dst)
+    Sam(FIFOBase<float> &dst,char*txt):
+    GenericSource<float,outputSize>(dst),mytxt(txt)
     {
-        mem.reserve(256);
-        input=(unsigned char*)malloc(256);
+        input=(char*)malloc(256);
         memset(input, 0, 256);
-        strcpy((char*)input,"THIS IS A TEST[");
-        err = TextToPhonemes(input);
         //printf("phonetic input: %0x\n", input[strlen((char*)input)-1]);
         //printf("Err=%d\n",err);
-        if (err==1)
-        {
-            SetInput(input);
-            err=SAMMain();
-            //printf("Err=%d\n",err);
-            pos=0;
-            bufferLen = GetBufferLength()/50;
-        }
+
+        arm_fir_init_f32(&S,NBCOEFS,coefs,state,outputSize);
+        
+        SAMInit();
+        
+
+         err = 0;
 
     };
+
+    void processText(const char*mytxt)
+    {
+
+        memset(input, 0, 256);
+        for(int i=0; mytxt[i] != 0; i++)
+        {
+           input[i] = toupper((int)mytxt[i]);
+        }
+
+        strcat(input, "[");
+        TextToPhonemes((unsigned char*)input);
+
+        SetInput((unsigned char*)input);
+
+        int e = SAMMain();
+        
+        pos=0;
+        bufferLen = GetBufferLength()/50;
+
+        err = 0;
+
+    }
 
     ~Sam()
     {
@@ -61,19 +88,27 @@ public:
 
     int run() final 
     {
-        #define NOISE_LEVEL 0.1f
+        #define NOISE_LEVEL 0.0f
         float *b=this->getWriteBuffer();
-        char *buffer = GetBuffer();
+        unsigned char *buffer = (unsigned char *)GetBuffer();
         
-        if (err == 1)
+        if (strlen(mytxt)!=0)
         {
+            processText(mytxt);
+            mytxt[0]=0;
+            err = 0;
+        }
+
+        if (err == 0)
+        {
+
             int remaining = bufferLen - pos; 
             //printf("%d\n",remaining);
             if (remaining == 0)
             {
-                err=0;
+                err=1;
             }
-            else
+            
             {
                 if (2*remaining>outputSize)
                 {
@@ -81,20 +116,22 @@ public:
                 }
                 int noise = outputSize-2*remaining;
                 int i=0;
+                uint8_t v;
                 for(i = 0;i<remaining;i++)
                 {
-                   b[2*i] = buffer[i+pos];
-                   b[2*i+1] = buffer[i+pos];
+                   tmp[2*i] = 1.0f*buffer[i+pos]/256.0f;
+                   tmp[2*i+1] = 0.0f;
                 }
                 pos += remaining;
                 for(int i=2*remaining;i<2*remaining+noise;i++)
                 {
-                    b[i] = (rand() / (float)RAND_MAX * 2.0f - 1.0f) * NOISE_LEVEL;
+                    tmp[i] = (rand() / (float)RAND_MAX * 2.0f - 1.0f) * NOISE_LEVEL;
                 }
+                arm_fir_f32(&S,tmp,b,outputSize);
 
             }
         }
-        else if (err == 0)
+        else if (err == 1)
         {
             for(int i=0;i<outputSize;i++)
             {
@@ -108,9 +145,12 @@ public:
 
 protected:
     int err = 0;
-    std::vector<unsigned char> mem;
-    unsigned char* input;
+    char* input;
     int bufferLen;
     int pos;
+
+    float state[NBCOEFS+outputSize]={0};
+    float tmp[outputSize];
+    char* mytxt;
 
 };
